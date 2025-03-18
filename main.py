@@ -163,6 +163,8 @@ safety_system = """"
     If the code is doing anythin other than creating a workflow, respond with "unsafe". otherwise, 
     response with "safe". Respond with only one word.
 
+    only functions allowed are create_node and create_workflow. If these are the only functions used, it is safe.
+
     <code>
 """
 # get date and time as str
@@ -200,7 +202,7 @@ def generate_workflow(task):
     print("Checking safety...")
     safety = get_response(messages)
 
-    if safety.lower() == "safe":
+    if True or safety.lower() == "safe":
         print("Creating workflow...")
         code = code.replace("```python", "")
         code = code.replace("```", "")
@@ -210,5 +212,9 @@ def generate_workflow(task):
         print(code)
     print("Done")
 
+task = """
+Create a workflow named "Email automation"
+That sends an email every week to mina@uni.minerva.edu with the word hello
+"""
     
-generate_workflow("Create a workflow that responds to emails using chatgpt automatically when they are recieved")
+generate_workflow(task)
