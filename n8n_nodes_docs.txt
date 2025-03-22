@@ -1,0 +1,44 @@
+FORMAT:
+<Node type>
+<Node description: what does the node, what input does it take and what is its output>
+Connections Type: main
+Parameters: 
+  - <param 1>: <values> e.g. <example of a value>
+  .
+  .
+
+>TRIGGERS<
+
+n8n-nodes-base.manualTrigger
+Basic trigger, the workflow is triggered manually by the user
+Connections Type: main
+Parameters: 
+  Not applicable
+
+
+@n8n/n8n-nodes-langchain.chatTrigger
+A node that triggers when a chatbot recieves input (a chatbot is automatically created for it)
+It outputs in JSON format and its key is $json.chatinput for connected node
+Connections Type: main
+Parameters: 
+  N/A
+
+
+>ACTIONS<
+n8n-nodes-base.emailSend
+Sends an email
+Connections Type: main
+Parameters: 
+  - fromEmail:  email e.g. "from@email.com"
+  - toEmail: email  e.g. "to@email.com"
+  - subject: one line that describes the email e.g. "Check up!"
+  - emailFormat: "text" (only this value is allowed)
+  - text: email body e.g. "Hey how are you doing? I am emailing because ..."
+
+>LLM<
+@n8n/n8n-nodes-langchain.chainLlm
+Basic LLM chain. 
+Connections Type: main
+Parameters: 
+  - promptType: "define" (only one value allowed)
+  - text: "=This is a sample prompt, a test value from previous node: {{ $json.testkey }}"

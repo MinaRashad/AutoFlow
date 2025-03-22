@@ -12,6 +12,9 @@ with open("keys.json") as f:
 open_ai_key = keys["OPEN_AI_KEY"]
 n8n_key = keys["N8N_KEY"]
 
+with open("./n8n_nodes_docs.txt") as f:
+    n8n_nodes_docs = f.read()
+
 
 def get_response(messages):
     client = OpenAI(api_key=open_ai_key)
@@ -90,7 +93,7 @@ system_prompt = """ You are a model created to generate workflow on n8n using th
 This is the following functions and code you have access to
 
 ```python
-def create_workflow(name, nodes = [], connections = {})
+def create_workflow(name, nodes = [], connections ={})
 ```
 
 This function will create a new workflow with the given name, nodes and connections
@@ -127,6 +130,7 @@ test_nodes = [
 ]
 
 
+
 test_connections = {
     "Start": {
       "main": [
@@ -140,10 +144,16 @@ test_connections = {
       ]
     }
   }
-
-work_flow = create_workflow("Test with adding a node", test_nodes, test_connections)
 ```
+work_flow = create_workflow("Test with adding a node", test_nodes, test_connections)
+
+for any node, you can access its input from previous node by writing \{\{ $json }} (e.g. getting an input from LLM and want to send it as email)
+
+Here is a documentation of some nodes and how to use them:
+
 """
+
+system_prompt += n8n_nodes_docs
 
 planning_system = """
 Main task now:
@@ -160,10 +170,10 @@ Using this plan, return the respective code that would create the workflow. Resp
 
 safety_system = """" 
     The following python code was generated to create a workflow.
-    If the code is doing anythin other than creating a workflow, respond with "unsafe". otherwise, 
-    response with "safe". Respond with only one word.
 
-    only functions allowed are create_node and create_workflow. If these are the only functions used, it is safe.
+    only functions allowed are `create_node` and `create_workflow`. 
+    Defining variables is allowed. If it does anything else, reply with "unsafe".
+    Otherwise, reply with "safe"
 
     <code>
 """
@@ -202,7 +212,7 @@ def generate_workflow(task):
     print("Checking safety...")
     safety = get_response(messages)
 
-    if True or safety.lower() == "safe":
+    if safety.lower() == "safe":
         print("Creating workflow...")
         code = code.replace("```python", "")
         code = code.replace("```", "")
@@ -210,11 +220,13 @@ def generate_workflow(task):
     else:
         print("Unsafe code generated")
         print(code)
+        # print("Excuting anyway")
+        # code = code.replace("```python", "")
+        # code = code.replace("```", "")
+        # exec(code)
+
     print("Done")
 
-task = """
-Create a workflow named "Email automation"
-That sends an email every week to mina@uni.minerva.edu with the word hello
-"""
+task = sys.argv[1]
     
 generate_workflow(task)
