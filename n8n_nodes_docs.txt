@@ -42,3 +42,69 @@ Connections Type: main
 Parameters: 
   - promptType: "define" (only one value allowed)
   - text: "=This is a sample prompt, a test value from previous node: {{ $json.testkey }}"
+
+>Google Sheet<
+@n8n-nodes-base.googleSheets
+Google Sheets.  
+Connections Type: main
+Parameters: 
+  - resource: <credential>
+  - operation: "createSpreadsheet" or "deleteSpreadsheet"
+  - title: <spreadsheet title>
+
+>Airtable<
+@n8n-nodes-base.airtable
+Airtable. 
+Connections Type: main
+Parameters:
+  - operation: create, create or update, delete, get, search
+  - base: 
+    - "__rl": true,
+    - "mode": "list",
+    - "value": "
+  - table: 
+    - "__rl": true,
+    - "mode": "list",
+    - "value": "
+  - columns: 
+      - title: <spreadsheet title>
+      - "mappingMode": "defineBelow",
+      - "value": {},
+      - "matchingColumns": [],
+      - "schema": [],
+      - "attemptToConvertTypes": false,
+      - "convertFieldsToString": false
+
+>Hugging Face<
+@n8n/n8n-nodes-langchain.lmOpenHuggingFaceInference
+Hugging Face Inference Model.  
+Connections Type: main
+Parameters: 
+  - option 
+    - Top K: "1.0"
+    - Top P: "1.0"
+    - Frequency Penalty: "0.0"
+    - Sampling Temperature: "1.0"
+    - Presence Penalty: "0.0"
+    - Maximum Number of Tokens: "128"
+
+>Google Calendar<
+@n8n-nodes-base.googleCalendar
+Google Calendar. 
+Connections Type: main
+Parameters: 
+  - calendar 
+    - "__rl": true,
+    - "mode": "list",
+    - "value": ""
+
+
+>Hubspot Create Ticket<
+@n8n-nodes-base.hubspot
+HubSpot. 
+Connections Type: main
+Parameters: 
+  - resource: "ticket", "company", "contact", "conversation", "deal"
+  - operation: "get", "create", "delete", "property change", "privacy delete", "new message"
+
+
