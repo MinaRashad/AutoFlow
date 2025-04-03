@@ -4,6 +4,7 @@ import sys
 import requests
 import time
 from openai import OpenAI
+import streamlit as st
 
 
 with open("keys.json") as f:
@@ -147,7 +148,7 @@ test_connections = {
 ```
 work_flow = create_workflow("Test with adding a node", test_nodes, test_connections)
 
-for any node, you can access its input from previous node by writing \{\{ $json }} (e.g. getting an input from LLM and want to send it as email)
+for any node, you can access its input from previous node by writing {{ $json }} (e.g. getting an input from LLM and want to send it as email)
 
 Here is a documentation of some nodes and how to use them:
 
@@ -177,12 +178,8 @@ safety_system = """"
 
     <code>
 """
-# get date and time as str
-def get_date_time():
-    return time.strftime("%Y-%m-%d %H:%M:%S")
 
 def generate_workflow(task):
-    print("TASK: ", task)
     messages = [
         {
             "role": "system",
@@ -190,7 +187,7 @@ def generate_workflow(task):
         }
         ]
     
-    print("planning...")
+    st.write("planning...")
     plan = get_response(messages)
 
     messages = [
@@ -199,7 +196,7 @@ def generate_workflow(task):
             "content": system_prompt+excuting_system.replace("<plan>", plan)
         }
         ]
-    print("Generating workflow...")
+    st.write("Generating workflow...")
     code = get_response(messages)
 
     messages = [
@@ -209,24 +206,41 @@ def generate_workflow(task):
         }
         ]
     
-    print("Checking safety...")
+    st.write("Checking safety...")
     safety = get_response(messages)
 
     if safety.lower() == "safe":
-        print("Creating workflow...")
+        st.write("Creating workflow...")
         code = code.replace("```python", "")
         code = code.replace("```", "")
         exec(code)
+        st.write("Done")
+        st.write("Check your n8n dashboard for the new workflow")
+        st.write("https://n8n.squarelight.ai/")
     else:
-        print("Unsafe code generated")
-        print(code)
-        # print("Excuting anyway")
-        # code = code.replace("```python", "")
-        # code = code.replace("```", "")
-        # exec(code)
+        st.write("Warning: Unsafe code generated, check before excuting")
+        st.write(code)
+        # ask user with streamlit if they want to excute
 
-    print("Done")
+        if st.button("Execute"):
+            code = code.replace("```python", "")
+            code = code.replace("```", "")
+            exec(code)
+            st.write("Done")
+            st.write("Check your n8n dashboard for the new workflow")
+            st.write("https://n8n.squarelight.ai/")
+        else:
+            st.write("Code not executed")
 
-task = sys.argv[1]
+
+#task = sys.argv[1]
     
-generate_workflow(task)
+#generate_workflow(task)
+st.title("Autoflow: AI Workflow Generator")
+
+task = st.text_area("Task", "Create a workflow that sends an email when a new tweet is posted")
+
+if st.button("Generate Workflow"):
+    generate_workflow(task)
+    
+
