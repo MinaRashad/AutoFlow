@@ -35,7 +35,7 @@ Parameters:
   - emailFormat: "text" (only this value is allowed)
   - text: email body e.g. "Hey how are you doing? I am emailing because ..."
 
->LLM<
+LLM
 @n8n/n8n-nodes-langchain.chainLlm
 Basic LLM chain. 
 Connections Type: main
@@ -43,7 +43,7 @@ Parameters:
   - promptType: "define" (only one value allowed)
   - text: "=This is a sample prompt, a test value from previous node: {{ $json.testkey }}"
 
->Google Sheet<
+Google Sheet
 @n8n-nodes-base.googleSheets
 Google Sheets.  
 Connections Type: main
@@ -52,7 +52,7 @@ Parameters:
   - operation: "createSpreadsheet" or "deleteSpreadsheet"
   - title: <spreadsheet title>
 
->Airtable<
+Airtable
 @n8n-nodes-base.airtable
 Airtable. 
 Connections Type: main
@@ -75,7 +75,7 @@ Parameters:
       - "attemptToConvertTypes": false,
       - "convertFieldsToString": false
 
->Hugging Face<
+Hugging Face
 @n8n/n8n-nodes-langchain.lmOpenHuggingFaceInference
 Hugging Face Inference Model.  
 Connections Type: main
@@ -88,7 +88,7 @@ Parameters:
     - Presence Penalty: "0.0"
     - Maximum Number of Tokens: "128"
 
->Google Calendar<
+Google Calendar
 @n8n-nodes-base.googleCalendar
 Google Calendar. 
 Connections Type: main
@@ -99,12 +99,10 @@ Parameters:
     - "value": ""
 
 
->Hubspot Create Ticket<
+Hubspot Create Ticket
 @n8n-nodes-base.hubspot
 HubSpot. 
 Connections Type: main
 Parameters: 
   - resource: "ticket", "company", "contact", "conversation", "deal"
   - operation: "get", "create", "delete", "property change", "privacy delete", "new message"
-
-
