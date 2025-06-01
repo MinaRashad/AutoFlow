@@ -23,18 +23,6 @@ def get_response(messages):
     return completion.choices[0].message.content
 
 
-# test_messages = [
-#     {
-#         "role": "system",
-#         "content": "You are a helpful assistant."
-#     },
-#     {
-#         "role": "user",
-#         "content": "What is the capital of France?"
-#     }
-# ]
-
-
 def create_workflow(name, nodes = [], connections = {}):
     url = "https://n8n.squarelight.ai/api/v1"
 
